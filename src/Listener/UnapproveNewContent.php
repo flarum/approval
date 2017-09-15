@@ -15,6 +15,7 @@ use Flarum\Core\Post;
 use Flarum\Event\ConfigureModelDefaultAttributes;
 use Flarum\Event\PostWillBeSaved;
 use Flarum\Flags\Flag;
+use Flarum\Tags\Tag;
 use Illuminate\Contracts\Events\Dispatcher;
 
 class UnapproveNewContent
@@ -44,34 +45,45 @@ class UnapproveNewContent
     public function unapproveNewPosts(PostWillBeSaved $event)
     {
         $post = $event->post;
+        $unapprove = false;
 
         if (! $post->exists) {
             $ability = $post->discussion->number_index == 0 ? 'startWithoutApproval' : 'replyWithoutApproval';
 
-            if ($event->actor->can($ability, $post->discussion)) {
-                if ($post->is_approved === null) {
-                    $post->is_approved = true;
-                }
+            $disallowedTags = Tag::getIdsWhereCannot($event->actor, 'discussion.' . $ability);
 
-                return;
+            foreach ($event->data['relationships']['tags']['data'] as $value) {
+                if (in_array($value['id'], $disallowedTags)) {
+                    $unapprove = true;
+                }
             }
 
-            $post->is_approved = false;
+            if($unapprove === false) {
+                if ($event->actor->can($ability, $post->discussion)) {
+                    if ($post->is_approved === null) {
+                        $post->is_approved = true;
+                    }
 
-            $post->afterSave(function ($post) {
-                if ($post->number == 1) {
-                    $post->discussion->is_approved = false;
-                    $post->discussion->save();
+                    return;
                 }
+            } else {
+                $post->is_approved = false;
 
-                $flag = new Flag;
+                $post->afterSave(function ($post) {
+                    if ($post->number == 1) {
+                        $post->discussion->is_approved = false;
+                        $post->discussion->save();
+                    }
 
-                $flag->post_id = $post->id;
-                $flag->type = 'approval';
-                $flag->time = time();
+                    $flag = new Flag;
 
-                $flag->save();
-            });
+                    $flag->post_id = $post->id;
+                    $flag->type = 'approval';
+                    $flag->time = time();
+
+                    $flag->save();
+                });
+            }
         }
     }
 }
