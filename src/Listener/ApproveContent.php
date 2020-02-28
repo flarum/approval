@@ -57,6 +57,7 @@ class ApproveContent
     {
         $post = $event->post;
         $discussion = $post->discussion;
+        $user = $discussion->user;
 
         $discussion->refreshCommentCount();
         $discussion->refreshLastPost();
@@ -66,5 +67,9 @@ class ApproveContent
         }
 
         $discussion->save();
+
+        $user->refreshDiscussionCount();
+        $user->refreshCommentCount();
+        $user->save();
     }
 }
