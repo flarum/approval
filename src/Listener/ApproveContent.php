@@ -15,7 +15,6 @@ use Illuminate\Contracts\Events\Dispatcher;
 
 class ApproveContent
 {
-
     /**
      * @param Dispatcher $events
      */
