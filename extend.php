@@ -33,14 +33,14 @@ return [
         ->default('is_approved', true),
 
     (new Extend\ApiSerializer(BasicDiscussionSerializer::class))
-        ->attribute('isApproved', function (array $attributes, Discussion $discussion) {
+        ->attribute('isApproved', function ($serializer, Discussion $discussion) {
             return (bool) $discussion->is_approved;
         }),
 
     (new Extend\ApiSerializer(PostSerializer::class))
-        ->attribute('isApproved', function (array $attributes, Post $post) {
+        ->attribute('isApproved', function ($serializer, Post $post) {
             return (bool) $post->is_approved;
-        })->attribute('canApprove', function (array $attributes, Post $post, PostSerializer $serializer) {
+        })->attribute('canApprove', function (PostSerializer $serializer, Post $post) {
             return (bool) $serializer->getActor()->can('approvePosts', $post->discussion);
         }),
 
