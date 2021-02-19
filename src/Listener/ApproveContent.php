@@ -64,11 +64,14 @@ class ApproveContent
 
         if ($post->number == 1) {
             $discussion->is_approved = true;
+
+            $discussion->afterSave(function () use ($user) {
+                $user->refreshDiscussionCount();
+            });
         }
 
         $discussion->save();
 
-        $user->refreshDiscussionCount();
         $user->refreshCommentCount();
         $user->save();
     }
