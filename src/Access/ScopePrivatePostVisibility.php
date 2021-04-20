@@ -36,7 +36,7 @@ class ScopePrivatePostVisibility
                         ->orWhereExists($this->discussionWhereCanApprovePosts($actor));
                 });
             }
-    }   );
+        });
     }
 
     private function discussionWhereCanApprovePosts(User $actor)
