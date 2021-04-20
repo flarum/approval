@@ -21,7 +21,7 @@ class ScopePrivateDiscussionVisibility
     public function __invoke(User $actor, Builder $query)
     {
         // All statements need to be wrapped in an orWhere, since we're adding a
-        // subset of private posts that should be visible, not restricting the visible
+        // subset of private discussions that should be visible, not restricting the visible
         // set.
         $query->orWhere(function ($query) use ($actor) {
             // Show empty/private discussions if they require approval and they are
