@@ -22,6 +22,7 @@ class TagPolicy extends AbstractPolicy
      */
     public function addToDiscussion(User $actor, Tag $tag)
     {
+        // If actor has the global permission, this should be handled by `can`.
         if ($tag->is_restricted && ! $actor->hasPermission('tag'.$tag->id.'.discussion.startWithoutApproval')) {
             return $this->deny();
         }
