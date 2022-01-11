@@ -1,13 +1,13 @@
-import { extend, override } from 'flarum/extend';
-import app from 'flarum/app';
-import Discussion from 'flarum/models/Discussion';
-import Post from 'flarum/models/Post';
-import Badge from 'flarum/components/Badge';
-import DiscussionListItem from 'flarum/components/DiscussionListItem';
-import PostComponent from 'flarum/components/Post';
-import CommentPost from 'flarum/components/CommentPost';
-import Button from 'flarum/components/Button';
-import PostControls from 'flarum/utils/PostControls';
+import { extend, override } from 'flarum/common/extend';
+import app from 'flarum/forum/app';
+import Discussion from 'flarum/common/models/Discussion';
+import Post from 'flarum/common/models/Post';
+import Badge from 'flarum/common/components/Badge';
+import DiscussionListItem from 'flarum/forum/components/DiscussionListItem';
+import PostComponent from 'flarum/forum/components/Post';
+import CommentPost from 'flarum/forum/components/CommentPost';
+import Button from 'flarum/common/components/Button';
+import PostControls from 'flarum/forum/utils/PostControls';
 
 app.initializers.add('flarum-approval', () => {
   Discussion.prototype.isApproved = Discussion.attribute('isApproved');

@@ -1,5 +1,5 @@
-import { extend } from 'flarum/extend';
-import app from 'flarum/app';
+import { extend } from 'flarum/common/extend';
+import app from 'flarum/admin/app';
 
 app.initializers.add('flarum-approval', () => {
   extend(app, 'getRequiredPermissions', function (required, permission) {
