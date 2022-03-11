@@ -23,7 +23,7 @@ class UnapproveNewContent
     {
         $post = $event->post;
 
-        if (! $post->exists) {
+        if (!$post->exists) {
             $ability = $post->discussion->post_number_index == 0 ? 'startWithoutApproval' : 'replyWithoutApproval';
 
             if ($event->actor->can($ability, $post->discussion)) {
@@ -42,7 +42,7 @@ class UnapproveNewContent
                     $post->discussion->save();
                 }
 
-                $flag = new Flag;
+                $flag = new Flag();
 
                 $flag->post_id = $post->id;
                 $flag->type = 'approval';
@@ -55,11 +55,12 @@ class UnapproveNewContent
 
     /**
      * @param Discussion|CommentPost $instance
+     *
      * @return bool|null
      */
     public static function markUnapprovedContentAsPrivate($instance)
     {
-        if (! $instance->is_approved) {
+        if (!$instance->is_approved) {
             return true;
         }
     }

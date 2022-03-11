@@ -16,7 +16,7 @@ class ScopePrivateDiscussionVisibility
 {
     /**
      * @param Builder $query
-     * @param User $actor
+     * @param User    $actor
      */
     public function __invoke(User $actor, Builder $query)
     {
@@ -29,7 +29,7 @@ class ScopePrivateDiscussionVisibility
             // approve posts.
             $query->where('discussions.is_approved', 0);
 
-            if (! $actor->hasPermission('discussion.approvePosts')) {
+            if (!$actor->hasPermission('discussion.approvePosts')) {
                 $query->where(function (Builder $query) use ($actor) {
                     $query->where('discussions.user_id', $actor->id)
                         ->orWhere(function ($query) use ($actor) {
